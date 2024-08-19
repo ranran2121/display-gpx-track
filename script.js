@@ -85,8 +85,8 @@ function loadGPX(data) {
     async: true,
     polyline_options: { color: "transparent" },
     markers: {
-      startIcon: "images/end-pin.png",
-      endIcon: "images/end-pin.png",
+      startIcon: "images/icon-start.png",
+      endIcon: "images/icon-end.png",
     },
   })
     .on("addline", (event) => {
