@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <title>Esri Leaflet Tutorials: Display a map</title>
+    <link rel="stylesheet" href="styles.css" />
+
+    <!-- Load Leaflet from CDN -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css"
+    />
+
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/2.1.0/gpx.min.js"
+      defer
+    ></script>
+  </head>
+
+  <body>
+    <div style="display: flex">
+      <div style="height: 800px; width: 80%">
+        <div id="map" style="height: 800px"></div>
+        <input
+          type="file"
+          id="gpxFileInput"
+          accept=".gpx"
+          style="margin-top: 10px"
+        />
+      </div>
+      <div
+        id="list-container"
+        style="
+          height: 100vh;
+          min-width: 20%;
+          border-left: 1px solid black;
+          overflow: auto;
+        "
+      ></div>
+    </div>
+    <script type="module" src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,15 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+#map {
+  height: 380px;
+}
+
+.row {
+  white-space: nowrap;
+  padding-left: 5px;
+  cursor: pointer;
+}
