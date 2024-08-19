@@ -3,27 +3,40 @@ L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   attribution: 'Map data &copy; <a href="http://www.osm.org">OpenStreetMap</a>',
 }).addTo(map);
 
-const fileInput = document.getElementById("gpxFileInput");
-
 const selectedCircleColor = "fuchsia";
 const selectedRowColor = "plum";
 
 let circleMarkers = []; // Array to store circle markers
 let gpxLayer = null;
+let gpxData = null;
 
-fileInput.addEventListener("change", function (event) {
-  const file = event.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      const gpxData = e.target.result;
-      loadGPX(gpxData);
-    };
-    reader.readAsText(file);
-  }
-});
+const fileInput = document
+  .getElementById("gpxFileInput")
+  .addEventListener("change", function (event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        gpxData = e.target.result;
 
-function loadGPX(gpxData) {
+        loadGPX(gpxData);
+      };
+
+      reader.readAsText(file);
+    }
+  });
+
+const saveFile = document
+  .getElementById("saveGpxFile")
+  .addEventListener("click", function () {
+    if (gpxData) {
+      saveGpxFile(gpxData);
+    } else {
+      alert("No GPX data available to save!");
+    }
+  });
+
+function loadGPX(data) {
   // Clear existing layers and markers
   if (gpxLayer) {
     map.removeLayer(gpxLayer);
@@ -34,9 +47,9 @@ function loadGPX(gpxData) {
   document.getElementById("list-container").innerHTML = "";
 
   const parser = new DOMParser();
-  const gpxDoc = parser.parseFromString(gpxData, "application/xml");
+  const gpxDoc = parser.parseFromString(data, "application/xml");
 
-  gpxLayer = new L.GPX(gpxData, {
+  gpxLayer = new L.GPX(data, {
     async: true,
     polyline_options: { color: "transparent" },
     markers: {
@@ -80,9 +93,8 @@ function loadGPX(gpxData) {
 
         row.addEventListener("dblclick", () => {
           if (circleMarkers.length > 2) {
-            const updatedGpxData = removeTrkpt({ gpxDoc, lat, lng });
-
-            loadGPX(updatedGpxData);
+            gpxData = removeTrkpt({ gpxDoc, lat, lng });
+            loadGPX(gpxData);
           } else {
             alert("No more deletions allowed");
           }
@@ -91,6 +103,33 @@ function loadGPX(gpxData) {
     })
     .on("loaded", (e) => map.fitBounds(e.target.getBounds()))
     .addTo(map);
+}
+
+function saveGpxFile(data) {
+  // Create a Blob from the GPX data
+  const blob = new Blob([data], { type: "application/gpx+xml" });
+
+  // Create a link element
+  const a = document.createElement("a");
+
+  // Create an object URL from the Blob
+  const url = URL.createObjectURL(blob);
+
+  // Set the href attribute to the object URL
+  a.href = url;
+
+  // Set the download attribute with a default file name
+  a.download = "modified_track.gpx";
+
+  // Append the link to the body (required for Firefox)
+  document.body.appendChild(a);
+
+  // Programmatically click the link to trigger the download
+  a.click();
+
+  // Clean up by removing the link and revoking the object URL
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
 
 const createRow = ({ lat, lng, meta }) => {
@@ -133,5 +172,8 @@ const removeTrkpt = ({ gpxDoc, lat, lng }) => {
   }
 
   const serializer = new XMLSerializer();
-  return serializer.serializeToString(gpxDoc);
+  const updatedGpxData = serializer.serializeToString(gpxDoc);
+  gpxData = updatedGpxData;
+
+  return updatedGpxData;
 };

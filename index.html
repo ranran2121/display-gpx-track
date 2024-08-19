@@ -30,12 +30,17 @@
     <div style="display: flex">
       <div style="height: 800px; width: 80%">
         <div id="map" style="height: 800px"></div>
-        <input
-          type="file"
-          id="gpxFileInput"
-          accept=".gpx"
-          style="margin-top: 10px"
-        />
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            padding: 0 4px 0 4px;
+            margin-top: 10px;
+          "
+        >
+          <input type="file" id="gpxFileInput" accept=".gpx" />
+          <button id="saveGpxFile">Save changes</button>
+        </div>
       </div>
       <div
         id="list-container"
