@@ -1,3 +1,11 @@
+window.onload = function () {
+  // Reset the file input field
+  const fileInput = document.getElementById("gpxFileInput");
+  if (fileInput) {
+    fileInput.value = ""; // Clear the file input
+  }
+};
+
 const map = L.map("map").setView([51.505, -0.09], 13);
 L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   attribution: 'Map data &copy; <a href="http://www.osm.org">OpenStreetMap</a>',
