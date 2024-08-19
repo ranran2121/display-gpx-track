@@ -3,6 +3,30 @@ L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   attribution: 'Map data &copy; <a href="http://www.osm.org">OpenStreetMap</a>',
 }).addTo(map);
 
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(
+    function (position) {
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+
+      // Set the map view to the user's location
+      map.setView([latitude, longitude], 13);
+
+      // Optionally, add a marker at the user's location
+      // L.marker([latitude, longitude])
+      //   .addTo(map)
+      //   .bindPopup("You are here")
+      //   .openPopup();
+    },
+    function (error) {
+      console.error("Error retrieving geolocation: ", error);
+      // Handle error (optional)
+    }
+  );
+} else {
+  alert("Geolocation is not supported by this browser.");
+}
+
 const selectedCircleColor = "fuchsia";
 const selectedRowColor = "plum";
 
